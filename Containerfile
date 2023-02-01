@@ -1,4 +1,4 @@
-FROM python:3.9.12-alpine
+FROM python:alpine3.17
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -15,7 +15,7 @@ LABEL maintainer="osintsev@gmail.com" \
 	org.label-schema.usage="https://github.com/osminogin/docker-electrum-daemon#getting-started" \
 	org.label-schema.license="MIT" \
 	org.label-schema.url="https://electrum.org" \
-	org.label-schema.docker.cmd='docker run -d --name electrum-daemon --publish 127.0.0.1:7000:7000 --volume /srv/electrum:/data osminogin/electrum-daemon' \
+	org.label-schema.docker.cmd='docker run -d --name electrum-daemon --publish 127.0.0.1:7000:7000 --volume /srv/electrum:/data nprokofiev/electrum-daemon' \
 	org.label-schema.schema-version="1.0"
 
 ENV ELECTRUM_VERSION $VERSION
@@ -24,6 +24,9 @@ ENV ELECTRUM_PASSWORD electrumz		# XXX: CHANGE REQUIRED!
 ENV ELECTRUM_HOME /home/$ELECTRUM_USER
 ENV ELECTRUM_NETWORK mainnet
 
+
+RUN adduser -D $ELECTRUM_USER
+
 RUN mkdir -p /data ${ELECTRUM_HOME} && \
 	ln -sf /data ${ELECTRUM_HOME}/.electrum && \
 	chown ${ELECTRUM_USER} ${ELECTRUM_HOME}/.electrum /data
@@ -31,12 +34,16 @@ RUN mkdir -p /data ${ELECTRUM_HOME} && \
 # IMPORTANT: always verify gpg signature before changing a hash here!
 ENV ELECTRUM_CHECKSUM_SHA512 $CHECKSUM_SHA512
 
-RUN adduser -D $ELECTRUM_USER && \
-    apk --no-cache add --virtual build-dependencies gcc musl-dev libsecp256k1 libsecp256k1-dev libressl-dev  && \
+RUN apk --no-cache add --virtual build-dependencies gcc musl-dev libsecp256k1 libsecp256k1-dev libressl-dev gpg gpg-agent dirmngr && \
     wget https://download.electrum.org/${ELECTRUM_VERSION}/Electrum-${ELECTRUM_VERSION}.tar.gz && \
-    [ "${ELECTRUM_CHECKSUM_SHA512}  Electrum-${ELECTRUM_VERSION}.tar.gz" = "$(sha512sum Electrum-${ELECTRUM_VERSION}.tar.gz)" ] && \
-    echo -e "**************************\n SHA 512 Checksum OK\n**************************" && \
-    pip3 install cryptography==2.1.4 pycryptodomex Electrum-${ELECTRUM_VERSION}.tar.gz && \
+    wget https://download.electrum.org/${ELECTRUM_VERSION}/Electrum-${ELECTRUM_VERSION}.tar.gz.asc && \
+    wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && \
+    gpg --import ThomasV.asc && \
+    gpg --keyserver keyserver.ubuntu.com --recv-keys 637DB1E23370F84AFF88CCE03152347D07DA627C && \
+    gpg --keyserver keyserver.ubuntu.com --recv-keys 0EEDCFD5CAFB459067349B23CA9EEEC43DF911DC &&\
+    gpg --verify Electrum-${ELECTRUM_VERSION}.tar.gz.asc Electrum-${ELECTRUM_VERSION}.tar.gz && \
+    echo -e "**************************\n GPG VERIFIED OK\n**************************" && \
+    pip3 install cryptography==39.0.0 pycryptodomex Electrum-${ELECTRUM_VERSION}.tar.gz && \
     rm -f Electrum-${ELECTRUM_VERSION}.tar.gz && \
     apk del build-dependencies
 

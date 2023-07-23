@@ -25,10 +25,10 @@ electrum --offline $FLAGS setconfig rpcport 7000
 # XXX: Check load wallet or create
 
 # Remove daemon file after setconfig
-if [ ! "$FLAGS" = "" ]; then
-  USER=$(whoami)
-  rm /home/$USER/.electrum/${FLAGS:2}/daemon
-fi
+# if [ ! "$FLAGS" = "" ]; then
+#   USER=$(whoami)
+#   rm /home/$USER/.electrum/${FLAGS:2}/daemon
+# fi
 
 # Run application
 electrum $FLAGS daemon -d

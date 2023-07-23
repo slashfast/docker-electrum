@@ -3,7 +3,7 @@ set -ex
 
 # Network switch
 if [ "$ELECTRUM_NETWORK" = "mainnet" ]; then
-  FLAGS='--mainnet'
+  FLAGS=''
 elif [ "$ELECTRUM_NETWORK" = "testnet" ]; then
   FLAGS='--testnet'
 elif [ "$ELECTRUM_NETWORK" = "regtest" ]; then
@@ -23,6 +23,12 @@ electrum --offline $FLAGS setconfig rpchost 0.0.0.0
 electrum --offline $FLAGS setconfig rpcport 7000
 
 # XXX: Check load wallet or create
+
+# Remove daemon file after setconfig
+if [ ! "$FLAGS" = "" ]; then
+  USER=$(whoami)
+  rm /home/$USER/.electrum/${FLAGS:2}/daemon
+fi
 
 # Run application
 electrum $FLAGS daemon -d

@@ -22,43 +22,13 @@ Star this project on Docker Hub :star2: https://hub.docker.com/r/osminogin/elect
 
 ## Getting started
 
-#### docker
-
-Running with Docker:
-
-```bash
-docker run --rm --name electrum \
-    --env TESTNET=false \
-    --publish 127.0.0.1:7000:7000 \
-    --volume /srv/electrum:/data \
-    osminogin/electrum-daemon
-```
-```bash
-docker exec -it electrum-daemon electrum create
-docker exec -it electrum-daemon electrum daemon load_wallet
-docker exec -it electrum-daemon electrum daemon status
-{
-    "auto_connect": true,
-    "blockchain_height": 505136,
-    "connected": true,
-    "fee_per_kb": 427171,
-    "path": "/home/electrum/.electrum",
-    "server": "us01.hamster.science",
-    "server_height": 505136,
-    "spv_nodes": 10,
-    "version": "3.0.6",
-    "wallets": {
-        "/home/electrum/.electrum/wallets/default_wallet": true
-    }
-}
-```
-
-
 #### docker-compose
 
 [docker-compose.yml](https://github.com/osminogin/docker-electrum-daemon/blob/master/docker-compose.yml) to see minimal working setup. When running in production, you can use this as a guide.
 
 ```bash
+git clone https://github.com/slashfast/docker-electrum-daemon.git
+cd docker-electrum-daemon
 docker-compose up
 docker-compose exec electrum electrum daemon status
 docker-compose exec electrum electrum create

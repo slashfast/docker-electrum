@@ -2,15 +2,17 @@ version: '3.7'
 
 services:
   electrum:
-    build: .
+    build:
+      context: .
+      args:
+        - ELECTRUM_VERSION=4.4.5
     ports:
       - 127.0.0.1:7000:7000
     environment:
       - ELECTRUM_USER=electrum
       - ELECTRUM_PASSWORD=changeme
       - ELECTRUM_NETWORK=testnet
-      - ELECTRUM_VERSION=4.2.1
     container_name: electrum
-    image:  osminogin/docker-electrum-daemon
+    image: slashfast/docker-electrum-daemon
     volumes:
-        - ../electrum:/data
+      - ../electrum:/data

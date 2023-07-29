@@ -12,6 +12,8 @@ services:
       - ELECTRUM_USER=electrum
       - ELECTRUM_PASSWORD=changeme
       - ELECTRUM_NETWORK=testnet
+      - ELECTRUM_PROXY=socks5:localhost:9050 # example: socks5:localhost:9050
+      - ELECTRUM_TOR_SERVER=electrums3lojbuj.onion:50001:t # example: electrums3lojbuj.onion:50001:t
     container_name: electrum
     image: slashfast/docker-electrum-daemon
     volumes:

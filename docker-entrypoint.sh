@@ -31,7 +31,12 @@ electrum --offline $FLAGS setconfig rpcport 7000
 # fi
 
 # Run application
-electrum $FLAGS daemon -d
+if ! [ -z "$ELECTRUM_PROXY" ] && ! [ -z "$ELECTRUM_TOR_SERVER" ]; then
+  electrum $FLAGS daemon -d -1 -s "${ELECTRUM_TOR_SERVER}" -p "${ELECTRUM_PROXY}"
+else
+  electrum $FLAGS daemon -d
+fi
+
 
 # Wait forever
 while true; do

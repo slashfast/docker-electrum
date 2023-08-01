@@ -14,7 +14,7 @@ fi
 
 
 # Graceful shutdown
-trap 'pkill -TERM -P1; electrum daemon stop; exit 0' SIGTERM
+trap 'pkill -TERM -P1; electrum $FLAGS daemon stop; exit 0' SIGTERM
 
 # Set config
 electrum --offline $FLAGS setconfig rpcuser ${ELECTRUM_USER}
@@ -31,12 +31,11 @@ electrum --offline $FLAGS setconfig rpcport 7000
 # fi
 
 # Run application
-if ! [ -z "$ELECTRUM_PROXY" ]; then
+if [ -n "$ELECTRUM_PROXY" ]; then
   electrum $FLAGS daemon -d -p "${ELECTRUM_PROXY}"
 else
   electrum $FLAGS daemon -d
 fi
-
 
 # Wait forever
 while true; do

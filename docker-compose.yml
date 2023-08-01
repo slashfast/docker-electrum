@@ -1,6 +1,13 @@
 version: '3.7'
 
 services:
+  tor-socks-proxy:
+    container_name: tor-socks-proxy
+    image: peterdavehello/tor-socks-proxy:latest
+    ports:
+      - 127.0.0.1:9150:9050
+    restart: unless-stopped
+    network_mode: "host"
   electrum:
     build:
       context: .
@@ -8,12 +15,15 @@ services:
         - ELECTRUM_VERSION=4.4.5
     ports:
       - 127.0.0.1:7000:7000
+    restart: unless-stopped
     environment:
       - ELECTRUM_USER=electrum
       - ELECTRUM_PASSWORD=changeme
       - ELECTRUM_NETWORK=testnet
-      - ELECTRUM_PROXY=socks5:localhost:9050 # example: socks5:localhost:9050
-      - ELECTRUM_TOR_SERVER=electrums3lojbuj.onion:50001:t # example: electrums3lojbuj.onion:50001:t
+      - ELECTRUM_PROXY=socks5:127.0.0.1:9050
+    depends_on:
+      - tor-socks-proxy
+    network_mode: "host"
     container_name: electrum
     image: slashfast/docker-electrum-daemon
     volumes:

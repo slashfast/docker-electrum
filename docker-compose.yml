@@ -7,7 +7,8 @@ services:
     ports:
       - 127.0.0.1:9150:9150
     restart: unless-stopped
-    network_mode: "host"
+    networks:
+      - main
   electrum:
     build:
       context: .
@@ -19,13 +20,17 @@ services:
     environment:
       - ELECTRUM_USER=electrum
       - ELECTRUM_PASSWORD=changeme
-      - ELECTRUM_NETWORK=testnet
-      - ELECTRUM_PROXY=socks5:127.0.0.1:9150
+      - ELECTRUM_NETWORK=mainnet
+      - ELECTRUM_PROXY=socks5:tor-socks-proxy:9150
+    networks:
+      - main
     depends_on:
       tor-socks-proxy:
         condition: service_healthy
-    network_mode: "host"
     container_name: electrum
     image: slashfast/docker-electrum-daemon
     volumes:
       - ../electrum:/data
+
+networks:
+  main:

@@ -20,7 +20,7 @@ services:
     environment:
       - ELECTRUM_USER=electrum
       - ELECTRUM_PASSWORD=changeme
-      - ELECTRUM_NETWORK=mainnet
+      - ELECTRUM_NETWORK=testnet
       - ELECTRUM_PROXY=socks5:tor-socks-proxy:9150
     networks:
       - main

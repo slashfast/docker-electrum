@@ -5,7 +5,7 @@ services:
     container_name: tor-socks-proxy
     image: peterdavehello/tor-socks-proxy:latest
     ports:
-      - 127.0.0.1:9150:9050
+      - 127.0.0.1:9050:9050
     restart: unless-stopped
     network_mode: "host"
   electrum:

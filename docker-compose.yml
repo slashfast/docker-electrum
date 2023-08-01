@@ -22,7 +22,8 @@ services:
       - ELECTRUM_NETWORK=testnet
       - ELECTRUM_PROXY=socks5:127.0.0.1:9150
     depends_on:
-      - tor-socks-proxy
+      tor-socks-proxy:
+        condition: service_healthy
     network_mode: "host"
     container_name: electrum
     image: slashfast/docker-electrum-daemon

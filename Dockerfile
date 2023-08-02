@@ -32,8 +32,8 @@ RUN mkdir -p /data ${ELECTRUM_HOME} && \
 # IMPORTANT: always verify gpg signature before changing a hash here!
 ENV ELECTRUM_CHECKSUM_SHA512 $CHECKSUM_SHA512
 
-RUN apk add libsecp256k1 libffi && \
-	apk --no-cache add --virtual build-dependencies gcc musl-dev libsecp256k1-dev libressl-dev gpg gpg-agent dirmngr && \
+RUN apk add libsecp256k1 && \
+	apk --no-cache add --virtual build-dependencies gcc musl-dev libsecp256k1-dev libressl-dev gpg gpg-agent dirmngr libffi libffi-dev && \
     wget https://download.electrum.org/${ELECTRUM_VERSION}/Electrum-${ELECTRUM_VERSION}.tar.gz && \
     wget https://download.electrum.org/${ELECTRUM_VERSION}/Electrum-${ELECTRUM_VERSION}.tar.gz.asc && \
     wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && \

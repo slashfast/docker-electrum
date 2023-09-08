@@ -27,7 +27,7 @@ Star this project on Docker Hub :star2: https://hub.docker.com/r/osminogin/elect
 [docker-compose.yml](https://github.com/osminogin/docker-electrum-daemon/blob/master/docker-compose.yml) to see minimal working setup. When running in production, you can use this as a guide.
 
 ```bash
-git clone https://github.com/slashfast/docker-electrum-daemon.git
+git clone -b docker-compose-tor https://github.com/slashfast/docker-electrum-daemon.git
 cd docker-electrum-daemon
 docker-compose up
 docker-compose exec electrum electrum daemon status

@@ -1,7 +1,6 @@
 FROM python:3.10-alpine
 
 ARG ELECTRUM_VERSION
-ARG CHECKSUM_SHA512
 ARG ELECTRUM_NETWORK
 
 LABEL maintainer="slashcooperlive@gmail.com" \
@@ -9,12 +8,12 @@ LABEL maintainer="slashcooperlive@gmail.com" \
 	org.label-schema.name="Electrum wallet (RPC enabled)" \
 	org.label-schema.description="Electrum wallet with JSON-RPC enabled (daemon mode)" \
 	org.label-schema.version=$VERSION \
-	org.label-schema.vcs-url="https://github.com/slashfast/docker-electrum-daemon" \
-	org.label-schema.usage="https://github.com/slashfast/docker-electrum-daemon#getting-started" \
+	org.label-schema.vcs-url="https://github.com/slashfast/docker-electrum" \
+	org.label-schema.usage="https://github.com/slashfast/docker-electrum#getting-started" \
 	org.label-schema.license="MIT" \
 	org.label-schema.url="https://electrum.org" \
-	org.label-schema.docker.cmd='docker run -d --name electrum-daemon --publish 127.0.0.1:7000:7000 --volume /srv/electrum:/data slashfast/electrum-daemon' \
-	org.label-schema.schema-version="1.0"
+	org.label-schema.docker.cmd='docker run -d --name electrum --publish 127.0.0.1:7000:7000 --volume /srv/electrum:/data slashfast/electrum' \
+	org.label-schema.schema-version="0.1"
 
 ENV ELECTRUM_VERSION $ELECTRUM_VERSION
 ENV ELECTRUM_USER electrum
@@ -28,9 +27,6 @@ RUN adduser -D $ELECTRUM_USER
 RUN mkdir -p /data ${ELECTRUM_HOME} && \
 	ln -sf /data ${ELECTRUM_HOME}/.electrum && \
 	chown ${ELECTRUM_USER} ${ELECTRUM_HOME}/.electrum /data
-
-# IMPORTANT: always verify gpg signature before changing a hash here!
-ENV ELECTRUM_CHECKSUM_SHA512 $CHECKSUM_SHA512
 
 RUN apk add libsecp256k1 && \
 	apk --no-cache add --virtual build-dependencies gcc musl-dev libsecp256k1-dev libressl-dev gpg gpg-agent dirmngr libffi libffi-dev && \

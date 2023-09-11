@@ -30,7 +30,7 @@ docker-compose up
 docker-compose exec electrum electrum daemon status
 docker-compose exec electrum electrum create
 docker-compose exec electrum electrum daemon load_wallet
-curl --data-binary '{"id":"1","method":"listaddresses"}' http://username:password@localhost:7000
+curl --data-binary '{"id":"1","method":"listaddresses"}' http://YOUR_USERNAME:YOUR_PASSWORD@localhost:7000
 ```
 
 :exclamation:**Warning**:exclamation:

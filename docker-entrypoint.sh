@@ -3,7 +3,7 @@ set -ex
 
 # Network switch
 if [ "$ELECTRUM_NETWORK" = "mainnet" ]; then
-  FLAGS='--mainnet'
+  FLAGS=''
 elif [ "$ELECTRUM_NETWORK" = "testnet" ]; then
   FLAGS='--testnet'
 elif [ "$ELECTRUM_NETWORK" = "regtest" ]; then
@@ -14,7 +14,7 @@ fi
 
 
 # Graceful shutdown
-trap 'pkill -TERM -P1; electrum daemon stop; exit 0' SIGTERM
+trap 'pkill -TERM -P1; electrum $FLAGS daemon stop; exit 0' SIGTERM
 
 # Set config
 electrum --offline $FLAGS setconfig rpcuser ${ELECTRUM_USER}
@@ -24,8 +24,16 @@ electrum --offline $FLAGS setconfig rpcport 7000
 
 # XXX: Check load wallet or create
 
+# Remove daemon file after setconfig
+find /home/electrum/.electrum/ -name "daemon" -type f -delete
+
+
 # Run application
-electrum $FLAGS daemon -d
+if [ -n "$ELECTRUM_PROXY" ]; then
+  electrum $FLAGS daemon -d -p "${ELECTRUM_PROXY}"
+else
+  electrum $FLAGS daemon -d
+fi
 
 # Wait forever
 while true; do

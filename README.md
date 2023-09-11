@@ -17,15 +17,15 @@ Don't confuse with [Electrum server](https://github.com/spesmilo/electrum-server
 
 * `/data` - user data folder (on host it usually has a path ``/home/user/.electrum``).
 
-
 ## Getting started
-
 
 #### docker-compose
 
 [docker-compose.yml](https://github.com/slashfast/docker-electrum/blob/master/docker-compose.yml) to see minimal working setup. When running in production, you can use this as a guide.
 
 ```bash
+git clone -b docker-compose-tor https://github.com/slashfast/docker-electrum-daemon.git
+cd docker-electrum-daemon
 docker-compose up
 docker-compose exec electrum electrum daemon status
 docker-compose exec electrum electrum create
